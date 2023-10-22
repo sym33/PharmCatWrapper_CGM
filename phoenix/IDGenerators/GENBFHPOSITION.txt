@@ -1,0 +1,5 @@
+{!@#$&?Title=GENBFHPOSITION}
+{!@#$&?Remark=}
+{!@#$&?InitialValue=1}
+{!@#$&?Increment=1}
+

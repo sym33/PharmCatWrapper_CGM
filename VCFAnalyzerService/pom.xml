@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>test</groupId>
+	<artifactId>VCFAnalyzer</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.8.RELEASE</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<start-class>application.Main</start-class>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>data-local</id>
+			<name>data</name>
+			<url>file://${project.basedir}/src/main/resources/libs</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-loader</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/ca.uhn.hapi/hapi-base -->
+		<dependency>
+			<groupId>ca.uhn.hapi</groupId>
+			<artifactId>hapi-base</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ca.uhn.hapi/hapi-structures-v281 -->
+		<dependency>
+			<groupId>ca.uhn.hapi</groupId>
+			<artifactId>hapi-structures-v24</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>pharmcat</groupId>
+			<artifactId>pharmcat-all</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>core</artifactId>
+			<version>1.47.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>23.4-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>org.pharmgkb</groupId>
+			<artifactId>pgkb-common</artifactId>
+			<version>0.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.pharmgkb/pgkb-common-io -->
+		<dependency>
+			<groupId>org.pharmgkb</groupId>
+			<artifactId>pgkb-common-io</artifactId>
+			<version>0.1.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.jknack/handlebars -->
+		<dependency>
+			<groupId>com.github.jknack</groupId>
+			<artifactId>handlebars</artifactId>
+			<version>4.0.6</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.pharmgkb/vcf-parser -->
+		<dependency>
+			<groupId>org.pharmgkb</groupId>
+			<artifactId>vcf-parser</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-daemon</groupId>
+			<artifactId>commons-daemon</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+	</dependencies>
+
+
+
+<!-- 	<build> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.springframework.boot</groupId> -->
+<!-- 				<artifactId>spring-boot-maven-plugin</artifactId> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>repackage</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<includeSystemScope>true</includeSystemScope> -->
+<!-- 							<classifier>spring-boot</classifier> -->
+<!-- 							<mainClass> -->
+<!-- 								application.Main -->
+<!-- 							</mainClass> -->
+<!-- 							<layout>JAR</layout> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<excludes> -->
+<!-- 						<exclude> -->
+<!-- 							<groupId>org.springframework.boot</groupId> -->
+<!-- 							<artifactId>spring-boot-loader</artifactId> -->
+<!-- 						</exclude> -->
+<!-- 					</excludes> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-loader</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<zip destfile="${project.build.directory}/${project.build.finalName}.jar" update="true" compress="store">
+									<fileset dir="${project.build.directory}/classes" includes="application/Bootstrap.class"/>
+								</zip>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

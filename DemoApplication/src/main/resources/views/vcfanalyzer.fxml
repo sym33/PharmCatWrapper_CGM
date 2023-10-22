@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.VcfAnalyzerController">
+  <children>
+      <VBox prefHeight="169.0" prefWidth="900.0">
+         <children>
+            <Label text="VCF- Quellordner">
+               <VBox.margin>
+                  <Insets left="50.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER">
+               <children>
+                  <TextField id="TF_VCF_SOURCE" fx:id="tfVcfFolderPath" disable="true" editable="false" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="btnVcfFolderSelect" mnemonicParsing="false" onAction="#btnVcfFolderSelect_OnAction" prefHeight="25.0" prefWidth="170.0" text="Quellordner auswählen..." />
+               </children>
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </VBox.margin>
+            </HBox>
+            <Label text="Auftragsordner">
+               <VBox.margin>
+                  <Insets left="50.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER">
+               <children>
+                  <TextField fx:id="tfOrderFolderPath" disable="true" editable="false" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="btnOrderFolderSelect" mnemonicParsing="false" onAction="#btnOrderFolderSelect_OnAction" prefHeight="25.0" prefWidth="170.0" text="Auftragsordner auswählen..." />
+               </children>
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </VBox.margin>
+            </HBox>
+            <Label text="Ausgabeordner">
+               <VBox.margin>
+                  <Insets left="50.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER">
+               <children>
+                  <TextField fx:id="tfOutputFolderPath" disable="true" editable="false" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="btnOutputFolderSelect" mnemonicParsing="false" onAction="#btnOutputFolderSelect_OnAction" prefHeight="25.0" prefWidth="170.0" text="Ausgabeordner auswählen..." />
+               </children>
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+      </VBox>
+    <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="349.0" prefWidth="900.0" VBox.vgrow="ALWAYS">
+      <items>
+        <AnchorPane>
+          <children>
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Ausstehend" textAlignment="CENTER" wrapText="false">
+              <font>
+                <Font size="18.0" fx:id="x1" />
+              </font>
+              <textFill>
+                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
+              </textFill>
+            </Label>
+                  <ListView fx:id="lvToDoList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+          </children>
+        </AnchorPane>
+        <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
+          <content>
+            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0">
+              <children>
+                        <VBox alignment="TOP_CENTER" layoutY="7.0" prefHeight="200.0" spacing="20.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="7.0">
+                           <children>
+                              <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="430.0" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="btnStart" disable="true" mnemonicParsing="false" onAction="#btnStart_OnAction" prefHeight="50.0" prefWidth="150.0" text="Start" />
+                                    <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#btnStop_OnAction" prefHeight="50.0" prefWidth="150.0" text="Stop" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Label text="Current File:" />
+                              <Label fx:id="lbCurrentFile" text="-" />
+                           </children>
+                        </VBox>
+              </children>
+            </AnchorPane>
+          </content>
+        </ScrollPane>
+        <AnchorPane>
+          <children>
+            <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Erledigt" textAlignment="CENTER" textFill="$x2" wrapText="false" />
+                  <ListView fx:id="lvDoneList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+      <children>
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+          <font>
+            <Font size="11.0" fx:id="x3" />
+          </font>
+          <textFill>
+            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+          </textFill>
+        </Label>
+        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+      </children>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+  </children>
+</VBox>

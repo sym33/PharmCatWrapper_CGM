@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>
+    PharmCAT Report{{#if title}} [{{title}}]{{/if}}
+  </title>
+
+  {{> "header"}}
+
+</head>
+
+<body>
+
+<!--[if lt IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<h1>PharmCAT Report</h1>
+
+{{#if title}} <p>{{title}}</p>{{/if}}
+
+<p>Generated on: {{generatedOn}}</p>
+
+<div class="alert alert-danger">
+  <h4>Pre-release software - For code testing only</h4>
+  This software has not been officially released. You should only be using this software to evaluate whether the PharmCAT
+  executable will compile and run properly on your system. The content of the reporting is not yet complete so <strong>results
+  will change</strong>. The user recognizes they are using PharmCAT at their own risk.
+</div>
+
+<div class="alert alert-info">
+  <em>Disclaimer:</em> The PharmCAT report is only able to generate recommendations based on the information imported
+  into the software. The gene and variant information for all reported sections are interpreted directly from the
+  uploaded vcf file. The user recognizes they are using PharmCAT at their own risk. For a detailed disclaimer see
+  section IV.
+</div>
+
+<section>
+  <h2>Sections</h2>
+  <ol type="I">
+    <li><a href="#genotypes">Genotype Summary</a></li>
+    <li><a href="#guidelines">CPIC Recommendations</a></li>
+    <li><a href="#genes">Allele Call Details</a></li>
+    <li><a href="#disclaimer">Disclaimers</a></li>
+  </ol>
+</section>
+
+<section id="genotypes">
+  <h2>Genotype Summary</h2>
+
+  <p>Genotypes called: {{calledGenes}} / {{totalGenes}} </p>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Drugs <sup><a href="#genotypes-a">a</a></sup></th>
+      <th>Gene</th>
+      <th>Genotype</th>
+      <th>Allele Functionality <sup><a href="#genotypes-b">b</a></sup></th>
+      <th>Phenotype <sup><a href="#genotypes-b">b</a></sup></th>
+      <th>Uncallable Alleles <sup><a href="#genotypes-c">c</a></sup></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each genotypes}}
+      <tr>
+        <td>{{#each drugs}}
+          {{{drug this}}}
+        {{/each}}</td>
+        <td>
+          <a href="#{{gene}}">{{gene}}</a>{{#if hasMessages}}<sup>&dagger;</sup>{{/if}}
+        </td>
+        <td>
+          {{#each calls}}
+            <div>{{this}}</div>
+          {{/each}}
+        </td>
+        <td>
+          {{#each functions}}
+            <div style="white-space: nowrap;">{{this}}</div>
+          {{/each}}
+        </td>
+        <td>
+          {{#each phenotype}}
+            <div style="white-space: nowrap">{{this}}</div>
+          {{/each}}
+        </td>
+        <td>
+          {{#if called}}{{yesno uncallableAlleles}}{{/if}}
+          {{#unless called}}N/A{{/unless}}
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+
+  <div class="footnote" id="genotypes-a">
+    <sup>a</sup> The drugs are colored to indicate whether CPIC recommends a prescribing change based on the given genotype; highlighting is not based on CPIC classification of recommendation. When multiple diplotypes are possible for a gene, the drug is highlighted according to the highest level of prescribing change. <span class="rxChange"><i class="fa fa-times"></i> Red</span> indicates a prescribing change is recommended for the given diplotype. That is, the recommendation is different than ‘use label recommendation’ or ‘use recommended starting dose’, except for ivacaftor. <span class="rxPossibly"><i class="fa fa-warning"></i> Orange</span> indicates possible prescribing changes depending on additional information, e.g. pediatrics vs. adult, or the specific number of CYP2D6 normal alleles present (copy number). <span class="normal"><i class="fa fa-circle"></i> Green</span> indicates that there is no CPIC recommended prescribing change for the given diplotype, except for ivacaftor. <span class="highlight"><i class="fa fa-square"></i> Blue</span> indicates the specific guideline must be consulted because a CPIC recommended action cannot be provided based solely on diplotype (eg. warfarin and ribavirin/peginterferon).
+  </div>
+  <div class="footnote" id="genotypes-b">
+    <sup>b</sup> Allele functionality and phenotype terms are based on the <a href="https://cpicpgx.org/wp-content/uploads/2016/01/CPIC_term_standardization_project_final_terms.pdf">CPIC term standardization</a> project, <a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=27441996">PMID:27441996</a>. Guidelines published prior use the term 'extensive' instead of 'normal' metabolizer. CYP2C19*1/*17 is now classified as rapid metabolizer. Guidelines published prior group CYP2C19*1/*17 together with *17/*17 as ultrarapid metabolizer.
+  </div>
+  <div class="footnote" id="genotypes-c">
+    <sup>c</sup> Indicates alleles not considered for the genotype calls due to missing variant information, please see Allele calls section. Alleles that could not be considered due to missing input might change the metabolizer phenotype and possible CPIC recommendation.
+  </div>
+  <div class="footnote">
+    <sup>&dagger;</sup> Check the allele call details for this gene for more details about this call.
+  </div>
+  <div class="footnote">
+    For a full list of disclaimers and limitations see the <a href="#disclaimer">Disclaimer section</a>.
+  </div>
+</section>
+
+<section id="guidelines">
+  <h2>CPIC Recommendations</h2>
+
+  {{#each guidelines}}
+    <section class="guideline">
+      <h3 id="{{id}}">{{drugs}}</h3>
+
+      <section>
+        {{{summary}}}
+
+        <p>The official guideline can be found on the <a href="https://cpicpgx.org">CPIC website</a>.</p>
+      </section>
+
+      {{#if incidental}}
+        <div class="alert alert-warning">
+          Variant is included in CPIC supplemental table of variants recommended by the American College of Medical
+          Genetics (ACMG) that should be tested to determine carrier status as a part of population screening programs.
+        </div>
+      {{/if}}
+
+      <section>
+        {{#each geneCalls}}
+          <div class="geneCall"><a href="#{{gene}}">{{gene}}: {{diplotypes}}</a>{{#if astrolabe}} (from Astrolabe){{/if}}</div>
+        {{/each}}
+      </section>
+
+      {{#if multiMatch}}
+        <div class="alert alert-info"><strong>Note:</strong> More than one call was made for the applicable gene so multiple annotation groups could be shown</div>
+      {{/if}}
+
+      <section>
+        {{#each messages}}
+          <div class="alert alert-info">{{{this}}}</div>
+        {{/each}}
+      </section>
+
+      {{#unless reportable}}
+        <div class="alert alert-info">No genotypes matched for {{uncalledGenes}} so annotations cannot be shown.</div>
+      {{/unless}}
+      {{#if reportable}}
+        {{#unless matched}}
+          <div class="alert alert-warning">No CPIC recommendation for this allele combination.</div>
+        {{/unless}}
+      {{/if}}
+
+      {{#if image}}
+        <div class="image"><img src="{{image/url}}" alt="{{image/altText}}"/></div>
+      {{/if}}
+
+      {{#if matched}}
+        {{#each groups}}
+          <table>
+            <thead>
+            <tr><th>Type</th><th>Annotation</th></tr>
+            </thead>
+            <tbody>
+            {{#each annotations}}
+              <tr><td>{{term}}</td><td>{{{annotation}}}</td></tr>
+            {{/each}}
+            </tbody>
+          </table>
+        {{/each}}
+      {{/if}}
+
+      <section>
+        {{#each footnotes}}
+          <div class="footnote">{{this}}</div>
+        {{/each}}
+      </section>
+
+      <section>
+        <p>For more information see the <a href="{{url}}">annotation on PharmGKB</a>.</p>
+        {{#if citations}}
+          <p>Citations:</p>
+          <ul>
+            {{#each citations}}
+              <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{pmid}}">{{title}}</a> [PMID:{{pmid}}] <em>{{journal}}</em>. {{year}}.</li>
+            {{/each}}
+          </ul>
+        {{/if}}
+      </section>
+    </section>
+  {{/each}}
+</section>
+
+<section id="genes">
+  <h2>Allele Matching Details</h2>
+
+  <div>
+  <ol>
+  {{#each geneCalls}}
+    <li><a href="#{{gene}}">{{gene}} allele match data</a></li>
+  {{/each}}
+  </ol>
+  </div>
+
+  {{#each geneCalls}}
+    <section class="gene">
+      <h3 id="{{gene}}">{{gene}} allele match data</h3>
+
+      <h4>Genotype matched</h4>
+      <ul>
+        {{#each diplotypes}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+
+      {{#if hasUncalledHaps}}
+        <h4>Alleles Not Considered</h4>
+        <p>The following alleles are not considered due to {{totalMissingVariants}} missing positions of the total {{totalVariants}} positions: {{uncalledHaps}}</p>
+        <p>Carriage of these alleles might result in a different metabolizer phenotype and different guideline recommendations.</p>
+      {{/if}}
+
+      {{#if astrolabe}}
+        <div class="alert alert-info">
+          The call for {{gene}} comes from Astrolabe data which does not supply position-level detail. For specific
+          disclaimers and limitations, see Astrolabe specification.
+        </div>
+      {{/if}}
+
+      {{#if variantsUnspecified}}
+        <div class="alert alert-info">No variant data available.</div>
+      {{/if}}
+
+      {{#if incidental}}
+        <div class="alert alert-warning">
+          Variant is included in CPIC supplemental table of variants recommended by the American College of Medical
+          Genetics (ACMG) that should be tested to determine carrier status as a part of population screening programs.
+        </div>
+      {{/if}}
+
+      {{#each messages}}
+        <div class="alert alert-warning">{{{this}}}</div>
+      {{/each}}
+
+      {{#unless variantsUnspecified}}
+        <h4>Calls at Positions</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Position</th>
+            <th>RSID</th>
+            <th>Call</th>
+            <th>Wildtype</th>
+            <th>Related Alleles</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#each variants}}
+            <tr>
+              <td id="{{position}}">{{position}}</td>
+              <td id="{{dbSnpId}}">{{dbSnpId}}</td>
+              {{#if missing}}
+                <td class="missingVariant"><em>missing</em></td>
+              {{/if}}
+              {{#unless missing}}
+                {{{variantAlleles this}}}
+              {{/unless}}
+              <td>
+                {{wildtypeAllele}}
+              </td>
+              <td>
+                {{#each alleles}}{{this}} {{/each}}
+              </td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      {{/unless}}
+    </section>
+  {{/each}}
+</section>
+
+{{> "disclaimers"}}
+
+</body>
+</html>

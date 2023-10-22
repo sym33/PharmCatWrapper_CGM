@@ -1,0 +1,5 @@
+{!@#$&?Title=GENBFHGENEAGENT}
+{!@#$&?Remark=}
+{!@#$&?InitialValue=1}
+{!@#$&?Increment=1}
+

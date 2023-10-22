@@ -1,0 +1,56 @@
+{!@#$&?Name=BFH_SUBMITTESTFILES}
+{!@#$&?Title=}
+{**
+ * =================================================================== 
+ *
+ *    Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik
+ *
+ *
+ *    Project: BA Thesis Pharmakogenetic CDSS
+ * ===================================================================
+ *
+ * @context Script:BFH_SUBMITTESTFILES
+ * 
+ * ===================================================================
+ * @created  		18.11.2017 MAP
+ * @see      		Referenzen_auf_weitere_Infos
+ * @edit     		Aenderungsdatum_und_Ersteller
+ * 
+ * @call        Heinzelaufruf per Submit('BFH_SUBMITTESTFILES', '<%OrderID'>)
+ *
+ *                %orderID       Die ID des Testauftrages, welcher an das Analysetool übermittelt werden soll.
+ *                
+ *
+ *
+ *  @Info       Das Script schreibt die dem Order angefügte VCF-Datei und die HL7-Nachricht auf den definierten Pfad.
+ *
+ *}
+
+%orderID = &params1
+if(%orderID < 1)
+  Trace(#trcAlways,'<@ScriptName> Ungültige OrderID <%orderID>')
+  return
+endif
+// Auf diesen Pfad werden die Dateien geschrieben
+$path = 'D:\InterfaceData\PGOrderOut'
+Trace(#trcAlways,'<@ScriptName> Führe Auftrag <%orderID> aus')
+
+$cr = chr(13)
+$lf = chr(10)
+£ids = ExecSelect('select HL7_M, VCF_M, PATID_N from phoenix.BFH_TESTEXECUTION where EXECUTIONID_N=<%orderID>')
+%hl7Id = GetMemoLine(£ids, 1)
+%vcfID = GetMemoLine(£ids, 2)
+%patid= GetMemoLine(£ids, 3)
+$hl7 = GetMemo(%hl7id)
+$vcf = GetMemo(%vcfID)
+
+// CRLF durch LF für VCF-Kompatibilität ersetzen (und es funktioniert :) 
+Replace($vcf,'<$cr><$lf>','<$lf>')
+StringToFile($vcf, '<$path>\vcf\<%patid>_<%orderID>.vcf')
+
+// Bei HL7-Nachrichten benötigen wir ein CR, kein LF
+Replace($hl7,'<$cr><$lf>','<$cr>')
+StringToFile($hl7, '<$path>\hl7\<%orderID>.hl7')
+
+Trace(#trcAlways,'<@ScriptName> Auftrag <%orderID> ausgeführt')
+return

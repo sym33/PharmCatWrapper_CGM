@@ -1,0 +1,2 @@
+TNAME	TTYPE	BEMERK	FTYPE-TAB
+BFH_POSTTESTWARNUNG	USR	Formular: BFH_POSTTESTWARNUNG / 1 (Pharmakogenetische Posttestwarnung)

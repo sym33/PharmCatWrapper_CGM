@@ -1,0 +1,19 @@
+{!@#$&?Title=Pharmakogenetische Testfälle konfigurieren}
+{!@#$&?Title2=}
+{!@#$&?Title3=}
+{!@#$&?Domain=}
+{!@#$&?State=1}
+{!@#$&?Independent=0}
+{!@#$&?ACL=100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}
+%formID = GetUserSetting('PGCDSS', 'FORMIDTESTS', 0)
+if(%formID = 0)
+  %formid = NewForm('BFH_PGCDSSTESTCONFIG',0)
+  SetUserSetting('PGCDSS', 'FORMIDTESTS', %formID)
+endif
+ClearMemo(£Options) 
+MemoIniWriteString(£Options, 'Form', 'Title', 'Konfiguration Pharmakogenetische Tests') 
+MemoIniWriteString(£Options, 'Form', 'Name', 'BFH_PGCDSSTESTCONFIG') 
+MemoIniWriteString(£Options, 'Form', 'Version', '1') 
+MemoIniWriteString(£Options, 'Form', 'ID', %formID) 
+MemoIniWriteString(£Options, 'Form', 'HideButtons', #boFalse) 
+EditForm(£Options)

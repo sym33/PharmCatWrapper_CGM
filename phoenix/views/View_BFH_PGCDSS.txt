@@ -1,0 +1,31 @@
+{!@#$&?Name=BFH_PGCDSS}
+{!@#$&?Type=USR}
+{!@#$&?Remark=}
+<MSSQL>
+/* Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik */
+select 
+	info.text as INFOTEXT, 
+	act.TEXT as ACTIONTEXT, 
+	g.GENE_E as GENE, 
+	c.TEXT as Metabolizer, 
+	w.INFOURL_E as INFOURL, 
+	lg.RESULT as GENOTYPE, 
+	lg.PROBEDAT as PROBEDATUM, /* Das Datum, an welchem die genetische Probe entnommen wurde*/
+	lg.ERFDAT as ANALYSEDATUM, /* Das Datum, an welchem unser Algorithmus lief (Ungefähr, ist eigentlich Erfassungsdatum in Tabelle, dürfte aber gleich danach sein)*/
+	lp.patid as PATID, 
+	g.GENEAGENT_N as GENEAGENT 
+from phoenix.BFH_WARNING w 
+join phoenix.appmemo info on w.WARNINGTEXTINFO_M =info.TEXTID 
+join phoenix.appmemo act on w.WARNINGTEXTACTION_M = act.TEXTID 
+join phoenix.BFH_GENEAGENT g on g.GENEAGENT_N = w.GENEAGENT_N
+join phoenix.APPCODE c on c.TABELLE = 16724 and c.CODE = w.METABOLIZER_C /* In Codetabelle 30'000 sind die Metabolizer-Typen gespeichert*/
+/* Gen und Metabolizer matchen von Labor und GeneAgent-Definition, bei Labor nur den neusten Wert berücksichtigen*/
+join phoenix.applabor lp on lp.labunt = g.GENE_E and lp.RESULT=c.TEXT 
+and lp.erfdat = (Select max(li.ERFDAT) from phoenix.applabor li where li.patid=lp.patid and li.labunt = g.GENE_E)  
+left join phoenix.applabor lg on lg.labunt = g.GENE_E +'_Genotyp' and lp.PATID=lg.PATID
+and lg.erfdat = (Select max(lig.ERFDAT) from phoenix.applabor lig where lig.patid=lg.patid and lig.labunt = g.GENE_E +'_Genotyp') 
+</MSSQL>
+<ORACLE>
+
+</ORACLE>
+

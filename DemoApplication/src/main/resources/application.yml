@@ -1,0 +1,14 @@
+javafx:
+  title: VCF Analyzer
+default:
+  folder:
+    vcf: 
+    order:
+    out: 
+mapping:
+  metabolizerCodes:
+    Ultrarapid Metabolizer: LA10315-2 	 
+    Rapid Metabolizer: LA25390-8 	 
+    Normal Metabolizer: LA25391-6 	 
+    Intermediate Metabolizer: LA10317-8 	 
+    Poor Metabolizer: LA9657-3

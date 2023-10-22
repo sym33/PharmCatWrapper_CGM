@@ -1,0 +1,51 @@
+##fileformat=VCFv4.1
+##FILTER=<ID=PASS,Description="All filters passed">
+##fileDate=2016-06-03
+##source=IlluminaPlatinumGenomes, version: 2016-1.0
+##reference=hg38
+##contig=<ID=chr1,length=248956422,assembly=b38>
+##contig=<ID=chr2,length=242193529,assembly=b38>
+##contig=<ID=chr3,length=198295559,assembly=b38>
+##contig=<ID=chr4,length=190214555,assembly=b38>
+##contig=<ID=chr5,length=181538259,assembly=b38>
+##contig=<ID=chr6,length=170805979,assembly=b38>
+##contig=<ID=chr7,length=159345973,assembly=b38>
+##contig=<ID=chr8,length=145138636,assembly=b38>
+##contig=<ID=chr9,length=138394717,assembly=b38>
+##contig=<ID=chr10,length=133797422,assembly=b38>
+##contig=<ID=chr11,length=135086622,assembly=b38>
+##contig=<ID=chr12,length=133275309,assembly=b38>
+##contig=<ID=chr13,length=114364328,assembly=b38>
+##contig=<ID=chr14,length=107043718,assembly=b38>
+##contig=<ID=chr15,length=101991189,assembly=b38>
+##contig=<ID=chr16,length=90338345,assembly=b38>
+##contig=<ID=chr17,length=83257441,assembly=b38>
+##contig=<ID=chr18,length=80373285,assembly=b38>
+##contig=<ID=chr19,length=58617616,assembly=b38>
+##contig=<ID=chr20,length=64444167,assembly=b38>
+##contig=<ID=chr21,length=46709983,assembly=b38>
+##contig=<ID=chr22,length=50818468,assembly=b38>
+##contig=<ID=chrX,length=156040895,assembly=b38>
+##PEDIGREE=<Child=NA12877,Mother=NA12890,Father=NA12889>
+##PEDIGREE=<Child=NA12878,Mother=NA12892,Father=NA12891>
+##PEDIGREE=<Child=NA12879,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12880,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12881,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12882,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12883,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12884,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12885,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12886,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12887,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12888,Mother=NA12878,Father=NA12877>
+##PEDIGREE=<Child=NA12893,Mother=NA12878,Father=NA12877>
+##INFO=<ID=KM,Number=1,Type=Float,Description="Minimum normalized k-mer counts.">
+##INFO=<ID=KFP,Number=1,Type=Integer,Description="K-mer GT failures in the main pedigree.">
+##INFO=<ID=KFF,Number=1,Type=Integer,Description="K-mer failures in the founders.">
+##INFO=<ID=MTD,Number=.,Type=String,Description="Methods that call this site pedigree consistently.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##bcftools_normVersion=1.4+htslib-1.4
+##bcftools_normCommand=norm -f /illumina/sync/igenomes/Homo_sapiens/NCBI/GRCh38Decoy/Sequence/WholeGenomeFasta/genome.fa -Oz -o /illumina/build/platinumgenomes/2017.1-rc2/hg38/NA12877/NA12877.vcf.gz /illumina/development/PlatinumGenomes/2016-1.0/hg38/small_variants/NA12877/NA12877.vcf.gz; Date=Tue May 16 11:58:22 2017
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NA12877
+chr1	97883329	rs1801265	A	G	.	PASS	assume-default	GT	1|1
+chr1	97450058	rs3918290	C	T	.	PASS	assume-default	GT	1|1

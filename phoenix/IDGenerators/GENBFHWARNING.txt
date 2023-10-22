@@ -1,0 +1,5 @@
+{!@#$&?Title=GENBFHWARNING}
+{!@#$&?Remark=}
+{!@#$&?InitialValue=1}
+{!@#$&?Increment=1}
+

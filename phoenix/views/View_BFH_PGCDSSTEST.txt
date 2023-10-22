@@ -1,0 +1,25 @@
+{!@#$&?Name=BFH_PGCDSSTEST}
+{!@#$&?Type=USR}
+{!@#$&?Remark=}
+<MSSQL>
+/* Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik */
+select 
+t.EXECUTIONID_N as TESTID_N,
+t.testname_e as TESTNAME_E,
+t.start_q as START_Q,
+t.gene_e AS GENE_E,
+c.TEXT as EXPECTED_METABOLIZER_E,
+case when l.FORMID is null then 0 else 1 end as RESULTSARRIVED_X, /* liegt überhaupt ein Resultat vor? */
+lg.result + ' ' + l.RESULT as RESULT_E,
+case when l.result=c.text then 1 else 0 end as MATCH_X, /* Der check, ob das angekommene Resultat korrekt ist, vergleicht die Metabolizer als String */
+t.PATID_N as PATID_N,
+t.FALLID_N as FALLID_N
+ from phoenix.BFH_TESTEXECUTION t
+left join phoenix.APPLABOR l on -l.FORMID=t.EXECUTIONID_N and LABUNT = t.GENE_E /* negative FormID da sie von der Schnittstelle negativ importiert wird */
+left join phoenix.applabor lg on -lg.FORMID=t.EXECUTIONID_N and lg.LABUNT = t.GENE_E+'_Genotyp'
+join phoenix.appcode c on c.CODE = t.EXPECTED_METABOLIZER_C and c.TABELLE=16724
+</MSSQL>
+<ORACLE>
+
+</ORACLE>
+

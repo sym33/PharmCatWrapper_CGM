@@ -1,0 +1,19 @@
+{!@#$&?Title=Pharmakogenetisches CDSS konfigurieren}
+{!@#$&?Title2=}
+{!@#$&?Title3=}
+{!@#$&?Domain=}
+{!@#$&?State=1}
+{!@#$&?Independent=1}
+{!@#$&?ACL=100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}
+%formID = GetUserSetting('PGCDSS', 'FORMID', 0)
+if(%formID = 0)
+  %formid = NewForm('BFH_PGCDSSCONFIG',0)
+  SetUserSetting('PGCDSS', 'FORMID', %formID)
+endif
+ClearMemo(£Options) 
+MemoIniWriteString(£Options, 'Form', 'Title', 'Konfiguration Pharmakogenetische Warnmeldungen') 
+MemoIniWriteString(£Options, 'Form', 'Name', 'BFH_PGCDSSCONFIG') 
+MemoIniWriteString(£Options, 'Form', 'Version', '1') 
+MemoIniWriteString(£Options, 'Form', 'ID', %formID) 
+MemoIniWriteString(£Options, 'Form', 'HideButtons', #boFalse) 
+EditForm(£Options) 

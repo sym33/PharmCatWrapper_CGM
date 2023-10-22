@@ -1,0 +1,6 @@
+TABELLE	CODE	KURZBEZ	KURZBEZ2	KURZBEZ3	TEXT	TEXT2	TEXT3	BEMERKUNG	EXTERNALCODE	FTYPE-CODE
+16724	1				Ultrarapid Metabolizer				LA10315-2
+16724	2				Rapid Metabolizer				LA25390-8
+16724	3				Normal Metabolizer				LA25391-6
+16724	4				Intermediate Metabolizer				LA10317-8
+16724	5				Poor Metabolizer				LA9657-3

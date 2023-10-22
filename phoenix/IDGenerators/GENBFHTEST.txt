@@ -1,0 +1,5 @@
+{!@#$&?Title=GENBFHTEST}
+{!@#$&?Remark=}
+{!@#$&?InitialValue=1}
+{!@#$&?Increment=1}
+

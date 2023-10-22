@@ -1,0 +1,141 @@
+{!@#$&?Name=BFH_PGCDSS}
+{!@#$&?Title=Pharmakogenetisches CDSS Bachelorthesis M. Philips / K. Tippenhauer}
+{**
+ * =================================================================== 
+ *
+ *    Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik
+ *
+ *
+ *    Project: BA Thesis Pharmakogenetic CDSS
+ * ===================================================================
+ *
+ * @context Script:BFH_PGCDSS
+ * 
+ * ===================================================================
+ * @created  		05.11.2017 MAP
+ * @see      		Referenzen_auf_weitere_Infos
+ * @edit     		Aenderungsdatum_und_Ersteller
+ * 
+ * @call        [%ReturnCode] = Call('BFH_PGCDSS', $MedicamentCodes)
+ *
+ *                £MedicamentCodes       Enthält die neu zu verschreibenden Medikamente identifiziert über APPDRUGDETAIL.CODE. Kommasepariert
+ *                
+ *  @returns    1 wenn die Warnungen entweder gar nicht angezeigt oder positiv beantwortet wurden, 2 wenn die Warnung als "Abbrechen" beantwortet wurde.
+ *
+ *  @Info       Das Script führt einen Check auf bestehende Genmutationen mit den neu zu verordnenden Medikamenten aus. Ist eine Mutation mit den Medikamenten verknüpft wird eine Warnung angezeigt und gespeichert.
+ *
+ *}
+
+ 
+
+if(@ParamCount < 1)
+  Trace(#trcAlways, '<@Scriptname> wurde ohne $MedicamentCodes aufgerufen.')
+  return(-1)
+endif
+
+$MedicamentCodes = &Params1
+%size = StringLength($MedicamentCodes)
+// Falls kein Medikament übergeben wurde ist auch kein Check nötig.
+if(%size = 0) return 
+
+// Sind die übergebenen Medikamente in der Liste der zu prüfenden Medikamente?
+%count = 0
+£geneAgents = ExecSelect('select GENEAGENT_N from phoenix.BFH_GENEAGENTTOPRODUCT where PRODUCTIDENTIFIER_S in(<$MedicamentCodes>)', %count) // Ohne Parameter wegen IN-Statement
+
+if(%count = 0) return // Keines der übergebenen Medikamente ist in der Shortlist der Medikamente
+
+%selections = 0
+%i = 1
+loop
+  // Masterfrage: Hat der Patient eine Mutation die zu einem der geneAgents passt?
+  %geneAgent = GetMemoLine(£geneAgents, %i)
+  
+  // Erweiterungen: Wurde schon mal eine Warnung bei diesem Benutzer für diesen Patienten angezeigt?
+  // Wurde schon mal ein Medikament in der Gruppe verordnet und nicht wieder abgebrochen?
+  $sql = 'select INFOTEXT, ACTIONTEXT, GENE, METABOLIZER, INFOURL, GENOTYPE, PROBEDATUM, ANALYSEDATUM from phoenix.bfh_pgcdss where PATID=? and GENEAGENT =?'
+  clearMemo(£parameters)
+  MemoIniWriteString(£parameters, 'P0', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P0', 'Value', @PatID) 
+  MemoIniWriteString(£parameters, 'P1', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P1', 'Value', %geneAgent) 
+  %warningsCount = 0
+  £warning = ExecSelect($sql, %warningsCount, £parameters)
+  if(%warningsCount = 0) return // Kein entsprechende Warnung mit Laborresultat verknüpft ->Keine Warnung
+  $info = GetMemoLine(£warning, 1)
+  $action = GetMemoLIne(£warning, 2)
+  $gen = GetMemoLine(£warning, 3)
+  $metabolizer = GetMemoLIne(£warning, 4)
+  $url = GetMemoLine(£warning, 5)
+  $genotyp = GetMemoLine(£warning, 6)
+  $probedatum = GetMemoLine(£warning, 7)
+  $analysedatum = GetMemoLine(£warning, 8)
+  
+  ^now = @now
+  // Die Warnung lädt keine Informationen mehr ausser von ihrer eigenen Tabelle.
+  %warnungsFormID = NewForm('BFH_POSTTESTWARNUNG', 1)
+  %info =  SetMemo($info)
+  %action = SetMemo($action)
+  $insert = 'INSERT INTO BFH_POSTTESTWARNUNG (PATID,FORMID,RECORDID,READONLY,FALLID,ERFDAT,ERFID,MUTDAT,MUTID,WARNINGTEXTINFO_M,WARNINGTEXTACTION_M,GENE_E,METABOLIZER_E,USERID_N,DISPLAYTIME_Q,VCFANALYSEDATE_Q,GENOMEANALYSE_Q,URL_E,GENOTYP_E) ' //
+  Append($insert, 'values ')
+  // (PATID, FORMID,RECORDID,SEQNR,READONLY, LOCKID,FALLID,ERFDAT,ERFID,MUTDAT, MUTID,WARNINGTEXTINFO_M,WARNINGTEXTACTION_M, GENE_E,METABOLIZER_E, USERID_N, DISPLAYTIME_Q, VCFANALYSEDATE_Q, GENOMEANALYSE_Q, URL_E, GENOTYP_E)
+  Append($insert, '(?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+  clearMemo(£parameters)
+  MemoIniWriteString(£parameters, 'P0', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P0', 'Value', @patid) // Patid
+  MemoIniWriteString(£parameters, 'P1', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P1', 'Value', %warnungsFormID) // FormID 
+  MemoIniWriteString(£parameters, 'P2', 'Type', #dadtFloat) 
+  MemoIniWriteString(£parameters, 'P2', 'Value', ^now) // RecordID
+  MemoIniWriteString(£parameters, 'P3', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P3', 'Value', @FallID) // FallID
+  MemoIniWriteString(£parameters, 'P4', 'Type', #dadtDate) 
+  MemoIniWriteString(£parameters, 'P4', 'Value', @now) // ErfDat
+  MemoIniWriteString(£parameters, 'P5', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P5', 'Value', @PersID) // ErfID
+  MemoIniWriteString(£parameters, 'P6', 'Type', #dadtDate) 
+  MemoIniWriteString(£parameters, 'P6', 'Value', @now) // MutDat
+  MemoIniWriteString(£parameters, 'P7', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P7', 'Value', @PersID) // MutID 
+  MemoIniWriteString(£parameters, 'P8', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P8', 'Value', %info) // WARNINGTEXTINFO_M
+  MemoIniWriteString(£parameters, 'P9', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P9', 'Value', %action) // WARNINGTEXTACTION_M
+  MemoIniWriteString(£parameters, 'P10', 'Type', #dadtString) 
+  MemoIniWriteString(£parameters, 'P10', 'Value', $gen) // GENE_E
+  MemoIniWriteString(£parameters, 'P11', 'Type', #dadtString) 
+  MemoIniWriteString(£parameters, 'P11', 'Value', $metabolizer) // METABOLIZER_E
+  MemoIniWriteString(£parameters, 'P12', 'Type', #dadtFloat) 
+  MemoIniWriteString(£parameters, 'P12', 'Value', @UserID) // USERID_N
+  MemoIniWriteString(£parameters, 'P13', 'Type', #dadtDateTime) 
+  MemoIniWriteString(£parameters, 'P13', 'Value', @now) // DISPLAYTIME_Q
+  MemoIniWriteString(£parameters, 'P14', 'Type', #dadtDateTime) 
+  MemoIniWriteString(£parameters, 'P14', 'Value', $analysedatum) // VCFANALYSEDATE_Q TODO REPLACE!!!
+  MemoIniWriteString(£parameters, 'P15', 'Type', #dadtDateTime) 
+  MemoIniWriteString(£parameters, 'P15', 'Value', $probedatum) // GENOMEANALYSE_Q TODO REPLACE!!!
+  MemoIniWriteString(£parameters, 'P16', 'Type', #dadtString) 
+  MemoIniWriteString(£parameters, 'P16', 'Value', $url) // URL_E
+  MemoIniWriteString(£parameters, 'P17', 'Type', #dadtString) 
+  MemoIniWriteString(£parameters, 'P17', 'Value', $genotyp) // GENOTYP_E
+  ExecSQL($insert, £parameters)
+  
+  ClearMemo(£Options) 
+  MemoIniWriteString(£Options, 'Form', 'Title', 'Pharmakogenetische Warnmeldung') 
+  MemoIniWriteString(£Options, 'Form', 'Name', 'BFH_POSTTESTWARNUNG') 
+  MemoIniWriteString(£Options, 'Form', 'Version', '1') 
+  MemoIniWriteString(£Options, 'Form', 'ID', %warnungsFormID) 
+  MemoIniWriteString(£Options, 'Form', 'HideButtons', #boTrue) 
+  EditForm(£Options) 
+  
+  // Was wurde in der Warnung ausgewählt?
+  %optioncount = 0
+  clearMemo(£parameters)
+  MemoIniWriteString(£parameters, 'P0', 'Type', #dadtInteger) 
+  MemoIniWriteString(£parameters, 'P0', 'Value', %warnungsFormID)
+  %selectedOption = ExecSelect('select warningoption_r from phoenix.BFH_POSTTESTWARNUNG where FORMID=?', %optioncount, £parameters)
+  if(%selectedOption = 0) inc(%selections)
+  inc(%i)
+until(%i > %count)
+
+if(%selections > 0) return(2)
+
+return(1)
