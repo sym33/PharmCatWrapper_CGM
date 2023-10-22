@@ -2,7 +2,7 @@
 {!@#$&?Type=USR}
 {!@#$&?Remark=}
 <MSSQL>
-/* Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik */
+/* Copyright (c) Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik */
 select 
 	info.text as INFOTEXT, 
 	act.TEXT as ACTIONTEXT, 

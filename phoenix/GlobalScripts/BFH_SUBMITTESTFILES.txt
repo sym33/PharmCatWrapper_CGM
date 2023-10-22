@@ -3,7 +3,7 @@
 {**
  * =================================================================== 
  *
- *    Copyright (c) 2017 Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik
+ *    Copyright (c) Marwin Philips (MAP) & Kevin Tippenhauer (TIK), Bachelorthesis Medizininformatik
  *
  *
  *    Project: BA Thesis Pharmakogenetic CDSS
@@ -12,7 +12,7 @@
  * @context Script:BFH_SUBMITTESTFILES
  * 
  * ===================================================================
- * @created  		18.11.2017 MAP
+ * @created  		18.11.2022 MAP
  * @see      		Referenzen_auf_weitere_Infos
  * @edit     		Aenderungsdatum_und_Ersteller
  * 
